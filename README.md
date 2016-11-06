@@ -1,6 +1,6 @@
 # Community Driven AntLang
 
-![][https://antlang-software.github.io/example.png]
+![](https://antlang-software.github.io/example.png)
 
 ## What is CDAntLang?
 
