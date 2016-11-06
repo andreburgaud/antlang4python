@@ -192,6 +192,15 @@ def do(ast, ws=stdlib):
 				if x == [] or y == []: return []
 				return [[x[i%len(x)],y[i%len(y)]] for i in range(max(len(x),len(y)))]
 			return mingle
+		elif ast[1] == '⍴':
+			def reshape(n,v):
+				res = [[]]
+				if not isinstance(v,list): v = [v]
+				for x in v:
+					if len(res[-1]) == n: res.append([x])
+					else: res[-1].append(x)
+				return res
+			return reshape
 		elif ast[1] == '⍣':
 			def apply_n(f, n):
 				def g(x,y=None):
