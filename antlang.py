@@ -102,6 +102,9 @@ def _repr(x):
 	else:
 		return str(x)
 
+def scalar(x):
+	return x[0] if isinstance(x,list) and len(x) > 0 else x
+
 stdlib = {
 	"sin": md_map(sin),
 	"cos": md_map(cos),
@@ -115,14 +118,14 @@ stdlib = {
 	"asinh": md_map(asinh),
 	"acosh": md_map(acosh),
 	"atanh": md_map(atanh),
-	"eq": lambda a,b: int(_repr(a)==_repr(b)),
-	"ne": lambda a,b: int(_repr(a)!=_repr(b)),
-	"lt": lambda a,b: int(a<b),
-	"le": lambda a,b: int(a<=b),
-	"gt": lambda a,b: int(a>b),
-	"ge": lambda a,b: int(a>=b),
+	"eq": lambda a,b: int(_repr(scalar(a))==_repr(scalar(b))),
+	"ne": lambda a,b: int(_repr(scalar(a))!=_repr(scalar(b))),
+	"lt": lambda a,b: int(scalar(a)<scalar(b)),
+	"le": lambda a,b: int(scalar(a)<=scalar(b)),
+	"gt": lambda a,b: int(scalar(a)>scalar(b)),
+	"ge": lambda a,b: int(scalar(a)>=scalar(b)),
 	"length": lambda x: len(x) if isinstance(x,list) else 1,
-	"range": md_map(lambda n: [signum(n)*x for x in range(abs(n))])
+	"range": md_map(lambda n: [signum(scalar(n))*x for x in range(abs(scalar(n)))])
 }
 
 def do(ast, ws=stdlib):
@@ -148,11 +151,7 @@ def do(ast, ws=stdlib):
 			return lambda x,xs: reduce(func, [x]+(xs if isinstance(xs, list) else [xs]))
 		xast = [do(x, ws) for x in ast]
 		if isinstance(xast[0], types.FunctionType):
-			def term(x):
-				if isinstance(x, list) and len(x) == 1: return term(x[0])
-				if isinstance(x, list) and len(x) != 1: return list(map(term,x))
-				else: return x
-			return term(xast[0](*xast[1:]))
+			return xast[0](*xast[1:])
 	elif ast[0] == 'num':
 		return ast[1]
 	elif ast[0] == 'primitive':
