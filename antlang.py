@@ -7,7 +7,7 @@ from functools import reduce
 symbols = []
 
 def lexer(string):
-	string = re.sub(r'\s/.*\n','',string+'\n')
+	string = re.sub(r'(\s|^)/.*\n','',string+'\n')
 	stringlit = r'"[^"]"'
 	num = r'\-?\d*\.?\d+'
 	frac = num + r'/' + num
@@ -44,6 +44,8 @@ def index_of_close(tokens):
 	return {'index': index, 'groups': groups}
 
 def parser(tokens):
+	if len(tokens) == 0:
+		return ('num', 0)
 	if len(tokens) == 1 and len(tokens[0]) == 2 and tokens[0][0] in ['num','str','var','primitive']:
 		return tokens[0]
 	if len(tokens) > 1 and tokens[0] == ('special','(') and tokens[1] == ('special',')'):
