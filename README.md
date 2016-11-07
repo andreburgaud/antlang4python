@@ -17,5 +17,5 @@ git clone https://github.com/antlang-software/cdantlang
 cd cdantlang
 
 # Run
-python3 main.py
+python3 tkinter_frontend.py
 ```
