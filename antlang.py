@@ -125,7 +125,9 @@ stdlib = {
 	"gt": lambda a,b: int(scalar(a)>scalar(b)),
 	"ge": lambda a,b: int(scalar(a)>=scalar(b)),
 	"length": lambda x: len(x) if isinstance(x,list) else 1,
-	"range": md_map(lambda n: [signum(scalar(n))*x for x in range(abs(scalar(n)))])
+	"range": md_map(lambda n: [signum(scalar(n))*x for x in range(abs(scalar(n)))]),
+	"string": lambda x: "".join(map(lambda a: str(AntLang(a)),x if isinstance(x,list) else [x])),
+	"ustring": lambda s: list(str(s))
 }
 
 def do(ast, ws=stdlib):
@@ -153,6 +155,8 @@ def do(ast, ws=stdlib):
 		if isinstance(xast[0], types.FunctionType):
 			return xast[0](*xast[1:])
 	elif ast[0] == 'num':
+		return ast[1]
+	elif ast[0] == 'str':
 		return ast[1]
 	elif ast[0] == 'primitive':
 		if ast[1] == '+': return md_map(lambda x,y: x+y)

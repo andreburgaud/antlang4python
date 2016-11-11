@@ -78,6 +78,7 @@ add_namespace('Math', [ 'sin'
                       , 'atanh'
                       ])
 add_namespace('Lists', ['length', 'range'])
+add_namespace('Strings', ['string', 'ustring'])
 
 r.config(menu=men)
 
