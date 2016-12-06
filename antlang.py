@@ -240,3 +240,13 @@ def evaluate(string):
 	tokens = lexer(string)
 	ast = parser(tokens)
 	return AntLang(do(ast))
+
+if __name__ == '__main__':
+	while True:
+		try:
+			line = input('--> ')
+			print(evaluate(line))
+		except:
+			q = input('quit? (y/n)')
+			if q == 'y':
+				quit()
