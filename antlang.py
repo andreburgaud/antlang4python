@@ -3,6 +3,7 @@ import types
 from math import sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh, e
 import copy
 from functools import reduce
+import sys
 
 symbols = []
 
@@ -247,6 +248,7 @@ if __name__ == '__main__':
 			line = input('--> ')
 			print(evaluate(line))
 		except:
+			print(sys.exc_info()[0])
 			q = input('quit? (y/n)')
 			if q == 'y':
 				quit()
