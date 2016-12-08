@@ -8,7 +8,7 @@ symbols = []
 
 def lexer(string):
 	string = re.sub(r'(\s|^)/.*\n','',string+'\n')
-	stringlit = r'"[^"]"'
+	stringlit = r'"[^"]*"'
 	num = r'\-?\d*\.?\d+'
 	frac = num + r'/' + num
 	word = r'[A-Za-z\-_]+[A-Za-z0-9\-_]*'
