@@ -245,8 +245,13 @@ def evaluate(string):
 if __name__ == '__main__':
 	while True:
 		try:
-			line = input('--> ')
+			if len(sys.argv) > 1 and sys.argv[1] == '-np':
+				line = input('')
+			else:
+				line = input('--> ')
 			print(evaluate(line))
+		except (EOFError):
+			quit()
 		except:
 			print(sys.exc_info()[0])
 			q = input('quit? (y/n)')
