@@ -19,7 +19,6 @@ CURSOR=data['cursor']
 
 r = Tk()
 r.wm_title(data['title'])
-# r.configure(cursor=CURSOR)
 r.configure()
 
 FONT = (data['font-family'], data['font-size'])
@@ -51,25 +50,17 @@ def add_symbol(symbol, info, example, key=None):
 		r.bind('<Control_L>' + key, lambda e: copy(symbol))
 
 men = Menu(r, font=FONT)
-# men.config(cursor=CURSOR)
 
 def sub_add_command(submen, symbol):
 	submen.add_command(label=symbol, command=lambda *a: copy(symbol))
 
 def add_namespace(name, symbols):
 	submen = Menu(men, font=FONT, tearoff=0)
-	# submen.config(cursor=CURSOR)
 	for symbol in symbols:
 		sub_add_command(submen, symbol)
 	men.add_cascade(label=name, menu=submen)
 
 filemen = Menu(men, font=FONT, tearoff=0)
-# filemen.config(cursor=CURSOR)
-# def import_json(*a):
-# 	data = json.load(filedialog.askopenfile())
-# 	for key in data.keys():
-# 		antlang.stdlib[key] = data[key]
-# filemen.add_command(label='Import JSON', command=import_json)
 
 def open_file(*a):
 	myfile = filedialog.askopenfile()
@@ -151,7 +142,6 @@ add_symbol('{}', 'Function', '1 {x+2×y} 3')
 r.geometry('800x600')
 
 text.pack(side=BOTTOM, fill=X)
-# text.config(cursor=CURSOR)
 
 antlang.symbols = symbols
 

@@ -242,10 +242,14 @@ def do(ast, ws=stdlib):
 class AntLang:
 	def __init__(self, val): self.val = val
 	def __str__(self, inner = False):
+		if isinstance(self.val, list) and len(list) > 50:
+			return '<list len=' + str(len(list)) + '>'
 		if isinstance(self.val, list):
 			if inner: return '(' + ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val)) + ')'
 			else: return ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val))
 		if isinstance(self.val, types.FunctionType): return '{}'
+		if isinstance(self.val, dict):
+			return '<dict>'
 		else: return str(self.val)
 	__repr__ = __str__
 
