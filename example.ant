@@ -1,8 +1,14 @@
-tk: import python "tkinter"
+tk : import python "tkinter"
 
-window: call python tk dot "Tk"
+window : call python tk dot "Tk"
 
-button: call python (tk dot "Button"), window, ("text" → "Click me!"), "command" → {(window dot "title")∘"clicked!"}
+(window dot "title")∘"My First GUI"
+
+(window dot "geometry")∘"200x200"
+
+button-cmd : {call python (button dot "config"), "text"→"clicked!"}
+
+button : call python (tk dot "Button"), window, ("text"→"clieck me!"), "command"→button-cmd
 
 call python button dot "pack"
 
