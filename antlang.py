@@ -261,7 +261,7 @@ def do(ast, ws=stdlib):
 class AntLang:
 	def __init__(self, val): self.val = val
 	def __str__(self, inner = False):
-		if isinstance(self.val, list) and len(list) > 50:
+		if isinstance(self.val, list) and len(self.val) > 50:
 			return '[' + str(len(list)) + ' ELEMENTS]'
 		if isinstance(self.val, list):
 			if inner: return '(' + ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val)) + ')'
