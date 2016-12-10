@@ -5,6 +5,11 @@ import copy
 from functools import reduce
 import sys
 
+try:
+	import readline
+except ImportError:
+	pass
+
 symbols = []
 
 def lexer(string):
