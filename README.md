@@ -6,12 +6,12 @@ An AntLang implementation in Python.
 
 > python3 antlang.py
 
-## Python FFI
+## Make Build
 
-```antlang
-log: (import python "math") dot "log"
+### Install cx\_Freeze
 
-print: (((eval python "globals()") dot "get")∘"__builtins__") dot "print"
+> pip3 install cx\_Freeze
 
-print∘"Hello World!"
-```
+### Build Executable
+
+> python3 build.py
