@@ -252,8 +252,7 @@ if __name__ == '__main__':
 			print(evaluate(line))
 		except (EOFError):
 			quit()
+		except Exception as e:
+			print(e)
 		except:
-			print(sys.exc_info()[0])
-			q = input('quit? (y/n)')
-			if q == 'y':
-				quit()
+			pass
