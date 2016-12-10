@@ -10,5 +10,8 @@ An AntLang implementation in Python.
 
 ```antlang
 log: (import python "math") dot "log"
-eval python "print('Hello World!')"
+
+print: (((eval python "globals()") dot "get")∘"__builtins__") dot "print"
+
+print∘"Hello World!"
 ```

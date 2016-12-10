@@ -184,7 +184,7 @@ def do(ast, ws=stdlib):
 			return lambda x,y: (x if isinstance(x, list) else [x]) + (y if isinstance(y, list) else [y])
 		elif ast[1] == '∘':
 			def _apply(f,x):
-				if isinstance(f, types.FunctionType): return f(x)
+				if callable(f): return f(x)
 				if not isinstance(f, list): f = [f]
 				if not isinstance(x, list): return f[x]
 				else: return list(map(lambda x: _apply(f,x), x))
