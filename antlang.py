@@ -1,6 +1,6 @@
 import re
 import types
-from math import sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh, e
+from math import sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh, e, log
 import copy
 from functools import reduce
 import sys
@@ -136,6 +136,12 @@ def python(statement, argument = None):
 	else:
 		raise Exception('Python Error')
 
+def my_log(x, y = None):
+	if y is None:
+		return log(x)
+	else:
+		return log(y, x)
+
 stdlib = {
 	"sin": md_map(sin),
 	"cos": md_map(cos),
@@ -163,6 +169,7 @@ stdlib = {
 	"eval": "eval",
 	"call": "call",
 	"python": python,
+	"log": md_map(my_log),
 	"dot": lambda o, a: o.__getattribute__(str(a))
 }
 
