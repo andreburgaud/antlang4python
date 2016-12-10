@@ -5,3 +5,5 @@ window: call python tk dot "Tk"
 button: call python (tk dot "Button"), window, ("text" → "Click me!"), "command" → {(window dot "title")∘"clicked!"}
 
 call python button dot "pack"
+
+call python tk dot "mainloop"

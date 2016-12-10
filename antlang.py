@@ -281,9 +281,6 @@ if __name__ == '__main__':
 		script = open(sys.argv[2]).read()
 		for line in script.split('\n'):
 			evaluate(line)
-		try: input()
-		except EOFError: pass
-		except: pass
 	else:
 		while True:
 			try:
