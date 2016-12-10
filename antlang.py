@@ -164,9 +164,9 @@ def do(ast, ws=stdlib):
 			return val
 		if ast[0] == ('special', '{'):
 			body = ast[1:]
-			def f(x,y=None):
-				closure = copy.deepcopy(ws)
-				closure['x'] = x
+			def f(x=None,y=None,*rest):
+				closure = copy.copy(ws)
+				if x is not None: closure['x'] = x
 				if y is not None: closure['y'] = y
 				res = []
 				for expr in body:
@@ -281,6 +281,9 @@ if __name__ == '__main__':
 		script = open(sys.argv[2]).read()
 		for line in script.split('\n'):
 			evaluate(line)
+		try: input()
+		except EOFError: pass
+		except: pass
 	else:
 		while True:
 			try:

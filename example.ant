@@ -1,3 +1,7 @@
-print: eval python "print"
+tk: import python "tkinter"
 
-print∘"Hello World!"
+window: call python tk dot "Tk"
+
+button: call python (tk dot "Button"), window, ("text" → "Click me!"), "command" → {(window dot "title")∘"clicked!"}
+
+call python button dot "pack"
