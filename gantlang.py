@@ -1,6 +1,9 @@
 from tkinter import *
 from tkinter import filedialog
 
+import os
+import sys
+
 import json
 import antlang
 
@@ -88,6 +91,8 @@ def open_file(*a):
 	text.pack(fill=BOTH, expand=1)
 
 filemen.add_command(label='Open', command=open_file)
+
+filemen.add_command(label='Restart', command=lambda *a: os.execl(sys.executable, sys.executable, *sys.argv))
 
 men.add_cascade(label='File', menu=filemen)
 
