@@ -4,13 +4,22 @@ from tkinter import filedialog
 import json
 import antlang
 
-data = json.load(open('styles.json'))
+try:
+	data = json.load(open('styles.json'))
+except:
+	data = {
+		"font-family": "Helvetica",
+		"font-size": 14,
+		"title": "Community Driven AntLang",
+		"cursor": "tcross"
+	}
+
 
 CURSOR=data['cursor']
 
 r = Tk()
 r.wm_title(data['title'])
-r.configure(cursor=CURSOR)
+# r.configure(cursor=CURSOR)
 r.configure()
 
 FONT = (data['font-family'], data['font-size'])
@@ -42,25 +51,58 @@ def add_symbol(symbol, info, example, key=None):
 		r.bind('<Control_L>' + key, lambda e: copy(symbol))
 
 men = Menu(r, font=FONT)
-men.config(cursor=CURSOR)
+# men.config(cursor=CURSOR)
 
 def sub_add_command(submen, symbol):
 	submen.add_command(label=symbol, command=lambda *a: copy(symbol))
 
 def add_namespace(name, symbols):
-	submen = Menu(men, font=FONT, tearoff=1)
-	submen.config(cursor=CURSOR)
+	submen = Menu(men, font=FONT, tearoff=0)
+	# submen.config(cursor=CURSOR)
 	for symbol in symbols:
 		sub_add_command(submen, symbol)
 	men.add_cascade(label=name, menu=submen)
 
 filemen = Menu(men, font=FONT, tearoff=0)
-filemen.config(cursor=CURSOR)
-def import_json(*a):
-	data = json.load(filedialog.askopenfile())
-	for key in data.keys():
-		antlang.stdlib[key] = data[key]
-filemen.add_command(label='Import JSON', command=import_json)
+# filemen.config(cursor=CURSOR)
+# def import_json(*a):
+# 	data = json.load(filedialog.askopenfile())
+# 	for key in data.keys():
+# 		antlang.stdlib[key] = data[key]
+# filemen.add_command(label='Import JSON', command=import_json)
+
+def open_file(*a):
+	myfile = filedialog.askopenfile()
+	filename_with_path = myfile.name
+	filename = filename_with_path.split('/')[-1]
+	content = ''
+	try:
+		content = myfile.read()
+	except:
+		pass
+	editor = Toplevel()
+	editor.title(filename)
+	button_frame = Frame(editor)
+	button_frame.pack(side=TOP, expand=False, fill=BOTH)
+	def command_save(*a):
+		f = open(filename_with_path, 'w')
+		f.write(text.get("1.0", END))
+		f.close()
+	button_save = Button(button_frame, font=FONT, text='Save', command=command_save)
+	button_save.pack(side=LEFT, fill=BOTH, expand=True)
+	def command_run(*a):
+		content = text.get("1.0", END)
+		for line in content.split('\n'):
+			if line != '' and not line.startswith('/'):
+				execute(line)
+	button_run = Button(button_frame, font=FONT, text='Run', command=command_run)
+	button_run.pack(side=LEFT, fill=BOTH, expand=True)
+	text = Text(editor, font=FONT)
+	text.insert(INSERT, content)
+	text.pack(fill=BOTH, expand=1)
+
+filemen.add_command(label='Open', command=open_file)
+
 men.add_cascade(label='File', menu=filemen)
 
 add_namespace('Comparison', ['eq','ne','lt','le','gt','ge'])
@@ -103,13 +145,13 @@ add_symbol("'", 'Each', "sin'range∘5")
 add_symbol('?', 'Filter', '{x gt 5}?range∘10')
 add_symbol('/', 'Reduce', '0+/ 1,2,3')
 add_symbol('-', 'Negate', '-1')
-add_symbol('(  )', 'Group', '(5×1)+2')
-add_symbol('{  }', 'Function', '1 {x+2×y} 3')
+add_symbol('()', 'Group', '(5×1)+2')
+add_symbol('{}', 'Function', '1 {x+2×y} 3')
 
 r.geometry('800x600')
 
 text.pack(side=BOTTOM, fill=X)
-text.config(cursor=CURSOR)
+# text.config(cursor=CURSOR)
 
 antlang.symbols = symbols
 
@@ -121,12 +163,13 @@ def log(string):
 	lbox.yview(END)
 
 def execute(string):
+	log(string)
 	try:
 		log(antlang.evaluate(string))
 	except Exception as e:
 		log(e)
 	log('')
 
-text.bind('<Return>', lambda *a: [log(content.get()),execute(content.get()),text.select_range(0,END)][-1])
+text.bind('<Return>', lambda *a: [execute(content.get()),text.select_range(0,END)][-1])
 
 r.mainloop()
