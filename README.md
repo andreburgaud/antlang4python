@@ -10,4 +10,5 @@ An AntLang implementation in Python.
 
 ```antlang
 log: (import python "math") dot "log"
+eval python "print('Hello World!')"
 ```
