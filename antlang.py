@@ -106,6 +106,14 @@ def _repr(x):
 def scalar(x):
 	return x[0] if isinstance(x,list) and len(x) > 0 else x
 
+def python(statement, argument = None):
+	if statement == 'import' and argument != None:
+		return __import__(str(argument))
+	elif statement == 'eval' and argument != None:
+		return eval(str(argument))
+	else:
+		raise Exception('Python Error')
+
 stdlib = {
 	"sin": md_map(sin),
 	"cos": md_map(cos),
@@ -128,7 +136,11 @@ stdlib = {
 	"length": lambda x: len(x) if isinstance(x,list) else 1,
 	"range": md_map(lambda n: [signum(scalar(n))*x for x in range(abs(scalar(n)))]),
 	"string": lambda x: "".join(map(lambda a: str(AntLang(a)),x if isinstance(x,list) else [x])),
-	"ustring": lambda s: list(str(s))
+	"ustring": lambda s: list(str(s)),
+	"import": "import",
+	"eval": "eval",
+	"python": python,
+	"dot": lambda o, a: o.__getattribute__(str(a))
 }
 
 def do(ast, ws=stdlib):
