@@ -10,12 +10,8 @@ except:
 	data = {
 		"font-family": "Helvetica",
 		"font-size": 14,
-		"title": "Community Driven AntLang",
-		"cursor": "tcross"
+		"title": "AntLang"
 	}
-
-
-CURSOR=data['cursor']
 
 r = Tk()
 r.wm_title(data['title'])
