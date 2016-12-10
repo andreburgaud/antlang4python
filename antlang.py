@@ -111,6 +111,17 @@ def python(statement, argument = None):
 		return __import__(str(argument))
 	elif statement == 'eval' and argument != None:
 		return eval(str(argument))
+	elif statement == 'call':
+		if not isinstance(argument, list): argument = [argument]
+		o = argument[0]
+		args = []
+		kwargs = {}
+		for arg in argument[1:]:
+			if isinstance(arg, tuple):
+				kwargs[arg[0]] = arg[1]
+			else:
+				args.append(arg)
+		return o(*args, **kwargs)
 	else:
 		raise Exception('Python Error')
 
@@ -139,6 +150,7 @@ stdlib = {
 	"ustring": lambda s: list(str(s)),
 	"import": "import",
 	"eval": "eval",
+	"call": "call",
 	"python": python,
 	"dot": lambda o, a: o.__getattribute__(str(a))
 }
@@ -230,6 +242,8 @@ def do(ast, ws=stdlib):
 						return y
 				return g
 			return apply_n
+		elif ast[1] == '→':
+			return lambda x, y: (x, y)
 		elif ast[1] == "'":
 			return lambda f,x: list(map(f,x if isinstance(x,list) else [x]))
 		elif ast[1] == '?':
@@ -248,8 +262,12 @@ class AntLang:
 			if inner: return '(' + ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val)) + ')'
 			else: return ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val))
 		if callable(self.val): return '{}'
+		if isinstance(self.val, tuple):
+			return str(AntLang(self.val[0])) + '→' + str(AntLang(self.val[1]))
 		if isinstance(self.val, dict):
 			return '[DICTIONARY]'
+		if isinstance(self.val, types.ModuleType):
+			return '[MODULE]'
 		else: return str(self.val)
 	__repr__ = __str__
 

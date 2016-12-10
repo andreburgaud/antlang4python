@@ -133,6 +133,7 @@ add_symbol('/', 'Reduce', '0+/ 1,2,3')
 add_symbol('-', 'Negate', '-1')
 add_symbol('()', 'Group', '(5×1)+2')
 add_symbol('{}', 'Function', '1 {x+2×y} 3')
+add_symbol('→', 'Keyed Value', '', key='k')
 
 r.geometry('800x600')
 
