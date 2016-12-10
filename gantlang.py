@@ -63,12 +63,11 @@ def add_namespace(name, symbols):
 filemen = Menu(men, font=FONT, tearoff=0)
 
 def open_file(*a):
-	myfile = filedialog.askopenfile()
-	filename_with_path = myfile.name
+	filename_with_path = filedialog.asksaveasfilename()
 	filename = filename_with_path.split('/')[-1]
 	content = ''
 	try:
-		content = myfile.read()
+		content = open(filename_with_path).read()
 	except:
 		pass
 	editor = Toplevel()
