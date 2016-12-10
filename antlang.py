@@ -243,13 +243,13 @@ class AntLang:
 	def __init__(self, val): self.val = val
 	def __str__(self, inner = False):
 		if isinstance(self.val, list) and len(list) > 50:
-			return '<list len=' + str(len(list)) + '>'
+			return '[' + str(len(list)) + ' ELEMENTS]'
 		if isinstance(self.val, list):
 			if inner: return '(' + ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val)) + ')'
 			else: return ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val))
-		if isinstance(self.val, types.FunctionType): return '{}'
+		if callable(self.val): return '{}'
 		if isinstance(self.val, dict):
-			return '<dict>'
+			return '[DICTIONARY]'
 		else: return str(self.val)
 	__repr__ = __str__
 
@@ -259,16 +259,21 @@ def evaluate(string):
 	return AntLang(do(ast))
 
 if __name__ == '__main__':
-	while True:
-		try:
-			if len(sys.argv) > 1 and sys.argv[1] == '-np':
-				line = input('')
-			else:
-				line = input('--> ')
-			print(evaluate(line))
-		except (EOFError):
-			quit()
-		except Exception as e:
-			print(e)
-		except:
-			pass
+	if len(sys.argv) == 3 and sys.argv[1] == '-f':
+		script = open(sys.argv[2]).read()
+		for line in script.split('\n'):
+			evaluate(line)
+	else:
+		while True:
+			try:
+				if len(sys.argv) > 1 and sys.argv[1] == '-np':
+					line = input('')
+				else:
+					line = input('--> ')
+				print(evaluate(line))
+			except (EOFError):
+				quit()
+			except Exception as e:
+				print(e)
+			except:
+				pass

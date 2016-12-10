@@ -1,5 +1,3 @@
-2+3
+print: eval python "print"
 
-
-
-
+print∘"Hello World!"
