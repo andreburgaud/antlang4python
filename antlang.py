@@ -12,6 +12,11 @@ except ImportError:
 
 symbols = []
 
+class pair:
+	def __init__(self, x, y):
+		self.x = x
+		self.y = y
+
 def lexer(string):
 	string = re.sub(r'(\s|^)/.*\n','',string+'\n')
 	stringlit = r'"[^"]*"'
@@ -113,7 +118,8 @@ def scalar(x):
 
 def python(statement, argument = None):
 	if statement == 'import' and argument != None:
-		return __import__(str(argument))
+		__import__(str(argument))
+		return sys.modules[str(argument)]
 	elif statement == 'eval' and argument != None:
 		return eval(str(argument))
 	elif statement == 'call':
@@ -122,8 +128,8 @@ def python(statement, argument = None):
 		args = []
 		kwargs = {}
 		for arg in argument[1:]:
-			if isinstance(arg, tuple):
-				kwargs[arg[0]] = arg[1]
+			if isinstance(arg, pair):
+				kwargs[arg.x] = arg.y
 			else:
 				args.append(arg)
 		return o(*args, **kwargs)
@@ -248,7 +254,7 @@ def do(ast, ws=stdlib):
 				return g
 			return apply_n
 		elif ast[1] == '→':
-			return lambda x, y: (x, y)
+			return lambda x, y: pair(x, y)
 		elif ast[1] == "'":
 			return lambda f,x: list(map(f,x if isinstance(x,list) else [x]))
 		elif ast[1] == '?':
@@ -267,8 +273,8 @@ class AntLang:
 			if inner: return '(' + ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val)) + ')'
 			else: return ' '.join(map(lambda x: AntLang(x).__str__(inner = True), self.val))
 		if callable(self.val): return '{}'
-		if isinstance(self.val, tuple):
-			return str(AntLang(self.val[0])) + '→' + str(AntLang(self.val[1]))
+		if isinstance(self.val, pair):
+			return str(AntLang(self.val.x)) + '→' + str(AntLang(self.val.y))
 		if isinstance(self.val, dict):
 			return '[DICTIONARY]'
 		if isinstance(self.val, types.ModuleType):
