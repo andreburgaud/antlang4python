@@ -144,11 +144,26 @@ def my_log(x, y = None):
 
 def include(package, script):
 	import shelve
-	executable = shelve.open(package)
-	lines = executable[script]
+	executable = shelve.open(str(package))
+	lines = executable[str(script)]
 	for line in lines:
 		evaluate(line, binary = True)
 	executable.close()
+	return package
+
+def bundle(package, scripts):
+	if not isinstance(scripts, list): scripts = [scripts]
+	import shelve
+	out = shelve.open(str(package))
+	for name in scripts:
+		name = str(name)
+		script = open(name).read()
+		result = []
+		for line in script.split('\n'):
+			result.append(evaluate(line, just_parse = True))
+		out[name] = result
+	out.close()
+	return package
 
 stdlib = {
 	"sin": md_map(sin),
@@ -179,6 +194,7 @@ stdlib = {
 	"python": python,
 	"log": md_map(my_log),
 	"include": md_map(include),
+	"bundle": bundle,
 	"dot": lambda o, a: o.__getattribute__(str(a))
 }
 
@@ -314,23 +330,8 @@ if __name__ == '__main__':
 		script = open(sys.argv[2]).read()
 		for line in script.split('\n'):
 			evaluate(line)
-	elif len(sys.argv) >= 3 and sys.argv[1] == '-create-pkg':
-		import shelve
-		out = shelve.open('out.antpkg')
-		for name in sys.argv[2:]:
-			script = open(name).read()
-			result = []
-			for line in script.split('\n'):
-				result.append(evaluate(line, just_parse = True))
-			out[name] = result
-		out.close()
-	elif len(sys.argv) == 4 and sys.argv[1] == '-pkg':
-		import shelve
-		executable = shelve.open(sys.argv[2])
-		lines = executable[sys.argv[3]]
-		for line in lines:
-			evaluate(line, binary = True)
-		executable.close()
+	elif len(sys.argv) == 3 and sys.argv[1] == '-e':
+		evaluate(sys.argv[2])
 	else:
 		while True:
 			try:
