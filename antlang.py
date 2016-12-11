@@ -142,6 +142,14 @@ def my_log(x, y = None):
 	else:
 		return log(y, x)
 
+def include(package, script):
+	import shelve
+	executable = shelve.open(package)
+	lines = executable[script]
+	for line in lines:
+		evaluate(line, binary = True)
+	executable.close()
+
 stdlib = {
 	"sin": md_map(sin),
 	"cos": md_map(cos),
@@ -170,6 +178,7 @@ stdlib = {
 	"call": "call",
 	"python": python,
 	"log": md_map(my_log),
+	"include": md_map(include),
 	"dot": lambda o, a: o.__getattribute__(str(a))
 }
 
