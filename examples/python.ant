@@ -1,0 +1,2 @@
+print: eval python "print"
+print ∘ "Hello World!"
