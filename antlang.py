@@ -289,16 +289,38 @@ class AntLang:
 		else: return str(self.val)
 	__repr__ = __str__
 
-def evaluate(string):
-	tokens = lexer(string)
-	ast = parser(tokens)
-	return AntLang(do(ast))
+def evaluate(string, just_parse=False, binary=False):
+	if binary:
+		ast = string
+	else:
+		tokens = lexer(string)
+		ast = parser(tokens)
+	if just_parse:
+		return ast
+	else:
+		return AntLang(do(ast))
 
 if __name__ == '__main__':
 	if len(sys.argv) == 3 and sys.argv[1] == '-f':
 		script = open(sys.argv[2]).read()
 		for line in script.split('\n'):
 			evaluate(line)
+	elif len(sys.argv) == 3 and sys.argv[1] == '-ast':
+		import shelve
+		script = open(sys.argv[2]).read()
+		result = []
+		for line in script.split('\n'):
+			result.append(evaluate(line, just_parse = True))
+		out = shelve.open(sys.argv[2] + '.antx')
+		out['main'] = result
+		out.close()
+	elif len(sys.argv) == 3 and sys.argv[1] == '-exec':
+		import shelve
+		executable = shelve.open(sys.argv[2] + '.antx')
+		lines = executable['main']
+		for line in lines:
+			evaluate(line, binary = True)
+		executable.close()
 	else:
 		while True:
 			try:
