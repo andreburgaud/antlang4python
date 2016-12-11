@@ -8,9 +8,9 @@ from cx_Freeze import setup, Executable
 
 setup(
 		# Name the program (antlang)
-		name='AntLang',
+		name = 'AntLang',
 		# Create the description
-		description='A Scientific Environment',
+		description = 'A Scientific Environment',
 		# Build from file gantlang.py
-		executables = [Executable('gantlang.py')]
+		executables = [Executable('gantlang.py'), Executable('antlang.py')]
 	)
