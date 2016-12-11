@@ -137,6 +137,7 @@ add_namespace('Math', [ 'sin'
                       ])
 add_namespace('Lists', ['length', 'range'])
 add_namespace('Strings', ['string', 'ustring'])
+add_namespace('Release', ['bundle', 'include'])
 
 r.config(menu=men)
 
