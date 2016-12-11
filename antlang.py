@@ -305,19 +305,20 @@ if __name__ == '__main__':
 		script = open(sys.argv[2]).read()
 		for line in script.split('\n'):
 			evaluate(line)
-	elif len(sys.argv) == 3 and sys.argv[1] == '-ast':
+	elif len(sys.argv) >= 3 and sys.argv[1] == '-create-pkg':
 		import shelve
-		script = open(sys.argv[2]).read()
-		result = []
-		for line in script.split('\n'):
-			result.append(evaluate(line, just_parse = True))
-		out = shelve.open(sys.argv[2] + '.antx')
-		out['main'] = result
+		out = shelve.open('out.antpkg')
+		for name in sys.argv[2:]:
+			script = open(name).read()
+			result = []
+			for line in script.split('\n'):
+				result.append(evaluate(line, just_parse = True))
+			out[name] = result
 		out.close()
-	elif len(sys.argv) == 3 and sys.argv[1] == '-exec':
+	elif len(sys.argv) == 4 and sys.argv[1] == '-pkg':
 		import shelve
-		executable = shelve.open(sys.argv[2] + '.antx')
-		lines = executable['main']
+		executable = shelve.open(sys.argv[2])
+		lines = executable[sys.argv[3]]
 		for line in lines:
 			evaluate(line, binary = True)
 		executable.close()
